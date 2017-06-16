@@ -34,7 +34,7 @@ class Ventana extends JFrame{
 
 class Contenido extends JPanel{
 	JLabel background;
-	JButton salir,prueba,del;
+	JButton salir,Bresultado,del;
 	JPanel up;
 	//PAD
 	JPanel pad;
@@ -54,8 +54,8 @@ class Contenido extends JPanel{
 		setLayout(null);
 		setLayouts();
 		setInputs();
-		setPad();
 		setExtraButtons();
+		setPad();
 		revalidate();
 	}
 	private void setLayouts(){
@@ -81,7 +81,6 @@ class Contenido extends JPanel{
 			}
 		}
 		inputField.getDocument().addDocumentListener(new listenInputField());
-		
 	}
 	private void setExtraButtons(){
 		//DELETE BUTTON
@@ -97,9 +96,9 @@ class Contenido extends JPanel{
 		}
 		del.addActionListener(new Delete());
 		//RESOLVE BUTTON =
-		prueba=new JButton("=");
-		prueba.setBounds(15, 60, 50, 20);
-		add(prueba);
+		Bresultado=new JButton("=");
+		Bresultado.setBounds(295, 207, 70, 262);
+		add(Bresultado);
 		class resolver implements ActionListener{ //Class which acts when the button is clicked
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -110,38 +109,24 @@ class Contenido extends JPanel{
 				System.out.println(res);
 			}
 		}
-		prueba.addActionListener(new resolver());
+		Bresultado.addActionListener(new resolver());
 	}
 	private void setPad(){
-		
 		pad=new JPanel();
-		Box Hor1=Box.createHorizontalBox();
-		Box Hor2=Box.createHorizontalBox();
-		Box Hor3=Box.createHorizontalBox();
-		Box Hor4=Box.createHorizontalBox();
-		//p.setHgap(20);
-		//p.setVgap(5);
-		pad.setLayout(new FlowLayout());
+		pad.setLayout(new GridLayout(4,4));
 		pad.setBackground(bg);
-		pad.setBounds(15, 120,300,300);
+		pad.setBounds(15, 120,350,350);
 		add(pad);
 		b1=new JButton("1"); b2=new JButton("2"); b3=new JButton("3"); badd=new JButton("+"); bdot=new JButton(".");
 		b4=new JButton("4"); b5=new JButton("5"); b6=new JButton("6"); bdec=new JButton("-");
 		b7=new JButton("7"); b8=new JButton("8"); b9=new JButton("9"); bmult=new JButton("*");
 		bpa=new JButton("("); b0=new JButton("0"); bpc=new JButton(")"); bdiv=new JButton("/");
 		int sh=15;
-		int sv=10; // MAYBE CREATE A FUNCTION FOR SEPARATION
-		Hor1.add(b1); Hor1.add(Box.createHorizontalStrut(sh)); Hor1.add(b2); Hor1.add(Box.createHorizontalStrut(sh)); Hor1.add(b3);Hor1.add(Box.createHorizontalStrut(sh)); Hor1.add(badd); Hor1.add(Box.createHorizontalStrut(sh)); Hor1.add(bdot);
-		Hor2.add(b4); Hor2.add(Box.createHorizontalStrut(sh)); Hor2.add(b5); Hor2.add(Box.createHorizontalStrut(sh)); Hor2.add(b6); Hor2.add(Box.createHorizontalStrut(sh)); Hor2.add(bdec);
-		Hor3.add(b7); Hor3.add(Box.createHorizontalStrut(sh)); Hor3.add(b8); Hor3.add(Box.createHorizontalStrut(sh)); Hor3.add(b9); Hor3.add(Box.createHorizontalStrut(sh)); Hor3.add(bmult);
-		Hor4.add(bpa);Hor4.add(Box.createHorizontalStrut(sh)); Hor4.add(b0);Hor4.add(Box.createHorizontalStrut(sh)); Hor4.add(bpc);Hor4.add(Box.createHorizontalStrut(sh)); Hor4.add(bdiv);
+		pad.add(b1); pad.add(b2); pad.add(b3); pad.add(badd); pad.add(bdot);
+		pad.add(b4); pad.add(b5);  pad.add(b6); pad.add(bdec); pad.add(Box.createHorizontalStrut(sh));
+		pad.add(b7); pad.add(b8);  pad.add(b9); pad.add(bmult); pad.add(Box.createHorizontalStrut(sh));
+		pad.add(bpa); pad.add(b0); pad.add(bpc); pad.add(bdiv); pad.add(Box.createHorizontalStrut(sh));
 		
-		Box Vertical=Box.createVerticalBox();
-		Vertical.add(Hor1); Vertical.add(Box.createVerticalStrut(sv));
-		Vertical.add(Hor2); Vertical.add(Box.createVerticalStrut(sv));
-		Vertical.add(Hor3); Vertical.add(Box.createVerticalStrut(sv));
-		Vertical.add(Hor4);  Vertical.setSize(300, 300);
-		pad.add(Vertical);
 		class BotonPad implements ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent e) {
