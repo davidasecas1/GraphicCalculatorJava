@@ -1,10 +1,14 @@
 package main;
 
 import java.awt.*;
+import java.awt.color.ColorSpace;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -16,9 +20,6 @@ public class Main {
 	}
 
 }
-
-
-
 class Ventana extends JFrame{
 
 	public Ventana(){
@@ -34,14 +35,14 @@ class Ventana extends JFrame{
 
 class Contenido extends JPanel{
 	JLabel background;
-	JButton salir,Bresultado,del;
+	Boton salir,Bresultado,del;
 	JPanel up;
 	//PAD
 	JPanel pad;
-	JButton b1,b2,b3,badd,bdot;
-	JButton b4,b5,b6,bdec;
-	JButton b7,b8,b9,bmult;
-	JButton bpa,b0,bpc,bdiv;
+	Boton b1,b2,b3,badd,bdot;
+	Boton b4,b5,b6,bdec;
+	Boton b7,b8,b9,bmult;
+	Boton bpa,b0,bpc,bdiv;
 	//......
 	JTextField inputField;
 	String input;
@@ -59,8 +60,10 @@ class Contenido extends JPanel{
 		revalidate();
 	}
 	private void setLayouts(){
-		bg=new Color(102,178,255);
+		//bg=new Color(102,178,255);
+		bg=new Color(240,240,240);
 		setBackground(bg);
+		setBorder(BorderFactory.createLineBorder(new Color(220,220,220)));
 		salir();
 	}
 	private void setInputs(){
@@ -84,19 +87,23 @@ class Contenido extends JPanel{
 	}
 	private void setExtraButtons(){
 		//DELETE BUTTON
-		del=new JButton("Del");
+		del=new Boton("C");
 		del.setBounds(275, 15, 50, 40);
 		add(del);
+		del.setTextSize(20);
 		class Delete implements ActionListener{ //Class which acts when the button is clicked
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				input=input.substring(0, input.length()-1);
-				inputField.setText(input);
+				if(input!="" && input!=null){ // ERROR
+					input=input.substring(0, input.length()-1);
+					inputField.setText(input);
+					
+				}
 			}
 		}
 		del.addActionListener(new Delete());
 		//RESOLVE BUTTON =
-		Bresultado=new JButton("=");
+		Bresultado=new Boton("=");
 		Bresultado.setBounds(295, 207, 70, 262);
 		add(Bresultado);
 		class resolver implements ActionListener{ //Class which acts when the button is clicked
@@ -106,7 +113,6 @@ class Contenido extends JPanel{
 				float res=getResult();
 				input=toStringF(res);
 				inputField.setText(input);
-				System.out.println(res);
 			}
 		}
 		Bresultado.addActionListener(new resolver());
@@ -117,10 +123,10 @@ class Contenido extends JPanel{
 		pad.setBackground(bg);
 		pad.setBounds(15, 120,350,350);
 		add(pad);
-		b1=new JButton("1"); b2=new JButton("2"); b3=new JButton("3"); badd=new JButton("+"); bdot=new JButton(".");
-		b4=new JButton("4"); b5=new JButton("5"); b6=new JButton("6"); bdec=new JButton("-");
-		b7=new JButton("7"); b8=new JButton("8"); b9=new JButton("9"); bmult=new JButton("*");
-		bpa=new JButton("("); b0=new JButton("0"); bpc=new JButton(")"); bdiv=new JButton("/");
+		b1=new Boton("1"); b2=new Boton("2"); b3=new Boton("3"); badd=new Boton("+"); bdot=new Boton(".");
+		b4=new Boton("4"); b5=new Boton("5"); b6=new Boton("6"); bdec=new Boton("-");
+		b7=new Boton("7"); b8=new Boton("8"); b9=new Boton("9"); bmult=new Boton("*");
+		bpa=new Boton("("); b0=new Boton("0"); bpc=new Boton(")"); bdiv=new Boton("/");
 		int sh=15;
 		pad.add(b1); pad.add(b2); pad.add(b3); pad.add(badd); pad.add(bdot);
 		pad.add(b4); pad.add(b5);  pad.add(b6); pad.add(bdec); pad.add(Box.createHorizontalStrut(sh));
@@ -130,14 +136,13 @@ class Contenido extends JPanel{
 		class BotonPad implements ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(e.getSource()==b1) input+="1"; if(e.getSource()==b2) input+="2"; if(e.getSource()==b3) input+="3"; if(e.getSource()==badd) input+="+"; if(e.getSource()==bdot) input+=".";
-				if(e.getSource()==b4) input+="4"; if(e.getSource()==b5) input+="5"; if(e.getSource()==b6) input+="6"; if(e.getSource()==bdec) input+="-";
-				if(e.getSource()==b7) input+="7"; if(e.getSource()==b8) input+="8"; if(e.getSource()==b9) input+="9"; if(e.getSource()==bmult) input+="*";
-				if(e.getSource()==bpa) input+="("; if(e.getSource()==b0) input+="0"; if(e.getSource()==bpc) input+=")"; if(e.getSource()==bdiv) input+="/";
-
+				JButton a=(JButton) e.getSource();
+				input+=a.getText();
 				inputField.setText(input);
 			}
 		}
+		
+		
 		b1.addActionListener(new BotonPad()); b2.addActionListener(new BotonPad()); b3.addActionListener(new BotonPad()); badd.addActionListener(new BotonPad()); bdot.addActionListener(new BotonPad());
 		b4.addActionListener(new BotonPad()); b5.addActionListener(new BotonPad()); b6.addActionListener(new BotonPad()); bdec.addActionListener(new BotonPad());
 		b7.addActionListener(new BotonPad()); b8.addActionListener(new BotonPad()); b9.addActionListener(new BotonPad()); bmult.addActionListener(new BotonPad());
@@ -156,7 +161,7 @@ class Contenido extends JPanel{
 		numOp=0;
 		for(int i=0;i<input.length();i++){
 			c=input.charAt(i);
-			if(c=='+'||c=='-'||c=='*'||c=='/'){ // ARRAY OF KNOWN OPS
+			if(c=='+'||c=='-'||c=='*'||c=='/'){ 
 				op[id]=c;
 				pos[id]=i;
 				b=true;
@@ -184,18 +189,31 @@ class Contenido extends JPanel{
 		float res=0;
 		float sum=0;
 		id=0;
-		while(id<=numOp){// MAKE PRIORITY ON BRACKETS AND * /
+		while(id<=numOp){// MAKE PRIORITY ON BRACKETS
 			if(id==0){
-				res=nums[id];
+				if(res==0)res=nums[id];
 			}else{
-				if(op[id-1]=='+'){
-					res+=nums[id];
-				}else if(op[id-1]=='-'){
-					res-=nums[id];
-				}else if(op[id-1]=='*'){
-					res*=nums[id];
-				}else if(op[id-1]=='/'){
-					res/=nums[id];
+				if(op[id-1]=='*' || op[id-1]=='/'){
+					if(op[id-1]=='*'){
+						res*=nums[id];
+					}else if(op[id-1]=='/'){
+						res/=nums[id];
+					}
+				}
+			}
+			id++;
+		} // I divided this into two whiles because of the priority of * and /
+		id=0;
+		while(id<=numOp){
+			if(id==0){
+				if(res==0)res=nums[id];
+			}else{
+				if(op[id-1]=='+' || op[id-1]=='-'){
+					if(op[id-1]=='+'){
+						res+=nums[id];
+					}else if(op[id-1]=='-'){
+						res-=nums[id];
+					}
 				}
 			}
 			id++;
@@ -205,8 +223,9 @@ class Contenido extends JPanel{
 	
 	
 	private void salir(){
-		salir=new JButton("Exit");
+		salir=new Boton("Exit");
 		salir.setBounds(335, 5,60,30);
+		salir.setTextSize(14);
 		add(salir);
 		class exit implements ActionListener{
 			@Override
@@ -235,3 +254,4 @@ class Contenido extends JPanel{
 		return res;
 	}
 }
+
