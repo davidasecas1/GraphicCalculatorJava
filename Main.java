@@ -44,6 +44,19 @@ class Contenido extends JPanel{
 	Boton b7,b8,b9,bmult;
 	Boton bpa,b0,bpc,bdiv;
 	//......
+	//MEMORIAS
+	JPanel mem;
+	Boton bA,bB,bC,bD,bE;
+	Boton bSto;
+	float A,B,C,D,E;
+	boolean Sto;
+	//.......
+	//CONSTANTES
+	JPanel constantes;
+	
+	
+	
+	//.......
 	JTextField inputField;
 	String input;
 	float[] nums;
@@ -57,6 +70,7 @@ class Contenido extends JPanel{
 		setInputs();
 		setExtraButtons();
 		setPad();
+		setMem();
 		revalidate();
 	}
 	private void setLayouts(){
@@ -95,9 +109,8 @@ class Contenido extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(input!="" && input!=null){ // ERROR
-					input=input.substring(0, input.length()-1);
-					inputField.setText(input);
-					
+					//input=input.substring(0, input.length()-1);
+					inputField.setText("");
 				}
 			}
 		}
@@ -109,10 +122,7 @@ class Contenido extends JPanel{
 		class resolver implements ActionListener{ //Class which acts when the button is clicked
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getPosyOp();
-				float res=getResult();
-				input=toStringF(res);
-				inputField.setText(input);
+				getResult();
 			}
 		}
 		Bresultado.addActionListener(new resolver());
@@ -173,19 +183,105 @@ class Contenido extends JPanel{
 		if(numOp!=0){
 			while(id<=numOp){
 				if(id==0){
-					nums[id]=toFloat(input.substring(0, pos[id]));
+					String a=input.substring(0, pos[id]);
+					if(a.equals("A") || a.equals("B") || a.equals("C")|| a.equals("D")|| a.equals("E")){
+						switch(a){
+							case "A":
+								nums[id]=A;
+								break;
+							case "B":
+								nums[id]=B;
+								break;
+							case "C":
+								nums[id]=C;
+								break;
+							case "D":
+								nums[id]=D;
+								break;
+							case "E":
+								nums[id]=E;
+								break;
+						}
+					}else{
+						nums[id]=toFloat(a);
+					}
 				}else if(id==numOp){
-					nums[id]=toFloat(input.substring(pos[id-1]+1,input.length()));
+					String a=input.substring(pos[id-1]+1,input.length());
+					if(a.equals("A") || a.equals("B") || a.equals("C")|| a.equals("D")|| a.equals("E")){
+						switch(a){
+							case "A":
+								nums[id]=A;
+								break;
+							case "B":
+								nums[id]=B;
+								break;
+							case "C":
+								nums[id]=C;
+								break;
+							case "D":
+								nums[id]=D;
+								break;
+							case "E":
+								nums[id]=E;
+								break;
+						}
+					}else{
+						nums[id]=toFloat(a);
+						
+					}
 				}else{
-					nums[id]=toFloat(input.substring(pos[id-1]+1,pos[id]));
+					String a=input.substring(pos[id-1]+1,pos[id]);
+					if(a.equals("A") || a.equals("B") || a.equals("C")|| a.equals("D")|| a.equals("E")){
+						switch(a){
+							case "A":
+								nums[id]=A;
+								break;
+							case "B":
+								nums[id]=B;
+								break;
+							case "C":
+								nums[id]=C;
+								break;
+							case "D":
+								nums[id]=D;
+								break;
+							case "E":
+								nums[id]=E;
+								break;
+						}
+					}else{
+						nums[id]=toFloat(a);
+					}
 				}
 				id++;
 			}
 		}else{
-			nums[id]=toFloat(input.substring(0, input.length()));
+			String a=input.substring(0, input.length());
+			if(a.equals("A") || a.equals("B") || a.equals("C")|| a.equals("D")|| a.equals("E")){
+				switch(a){
+					case "A":
+						nums[id]=A;
+						break;
+					case "B":
+						nums[id]=B;
+						break;
+					case "C":
+						nums[id]=C;
+						break;
+					case "D":
+						nums[id]=D;
+						break;
+					case "E":
+						nums[id]=E;
+						break;
+				}
+			}else{
+				nums[id]=toFloat(a);
+			}
 		}
 	}
-	private float getResult(){
+	private void getResult(){
+		getPosyOp();
 		float res=0;
 		float sum=0;
 		id=0;
@@ -218,9 +314,78 @@ class Contenido extends JPanel{
 			}
 			id++;
 		}
-		return res;
+		input=toStringF(res);
+		inputField.setText(input);
 	}
 	
+	private void setMem(){
+		mem=new JPanel();
+		mem.setLayout(new GridLayout(1,5));
+		mem.setBounds(15, 65, 350, 50);
+		add(mem);
+		setbSto();
+		int tam=25;
+		bA=new Boton("A"); bB=new Boton("B"); bC=new Boton("C"); bD=new Boton("D"); bE=new Boton("E");
+		mem.add(bA); mem.add(bB); mem.add(bC); mem.add(bD); mem.add(bE);
+		bA.setTextSize(tam); bB.setTextSize(tam); bC.setTextSize(tam); bD.setTextSize(tam); bE.setTextSize(tam);
+		class actMemorias implements ActionListener{
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				e.getSource();
+				Boton a=(Boton)e.getSource();
+				String s=a.getText();
+				if(Sto){
+					getResult();
+					switch(s){
+						case "A":
+							A=toFloat(inputField.getText());
+							break;
+						case "B":
+							B=toFloat(inputField.getText());
+							break;
+						case "C":
+							C=toFloat(inputField.getText());
+							break;
+						case "D":
+							D=toFloat(inputField.getText());
+							break;
+						case "E":
+							E=toFloat(inputField.getText());
+							break;
+					}
+					Sto=false;
+					bSto.setInactive();
+				}else{
+					input+=s;
+					inputField.setText(input);
+				}
+			}
+		}
+		bA.addActionListener(new actMemorias()); bB.addActionListener(new actMemorias()); bC.addActionListener(new actMemorias());
+		bD.addActionListener(new actMemorias()); bE.addActionListener(new actMemorias());
+		
+	}
+	
+	private void setbSto(){
+		A=0;B=0;C=0;D=0;E=0;
+		Sto=false;
+		bSto=new Boton("Sto");
+		bSto.setTextSize(15); 
+		mem.add(bSto);
+		class actBSto implements ActionListener{
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(Sto){
+					Sto=false;
+					bSto.setInactive();
+				}else{
+					Sto=true;
+					bSto.setActive();
+				}
+			}
+		}
+		bSto.addActionListener(new actBSto());
+	}
 	
 	private void salir(){
 		salir=new Boton("Exit");
@@ -245,6 +410,11 @@ class Contenido extends JPanel{
 		}
 		return res;
 	}
+	public int toInt(String str){
+		int res;
+		res=Integer.parseInt(str);
+		return res;
+	}
 	public String toString(int num){
 		String res=Integer.toString(num);
 		return res;
@@ -254,4 +424,3 @@ class Contenido extends JPanel{
 		return res;
 	}
 }
-
