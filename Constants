@@ -1,0 +1,14 @@
+G=6.67384x10^-11
+h=6.62606957x10^-34 
+impMag=
+g0=9.81
+c=3x10^8
+e=1.602176565x10^-19
+
+
+
+
+Character.toString ((char) codigo)
+private String ascii(codigo){
+	return Character.toString ((char) codigo);
+}
