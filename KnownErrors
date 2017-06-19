@@ -1,0 +1,2 @@
+Errors:
+ -When delete the input field when its empty returns an exception.
