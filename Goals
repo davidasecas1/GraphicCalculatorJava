@@ -1,6 +1,6 @@
 Goals:
-  -Give priority to multiplication, division and operations between brackets.
-  -Add some memory slots so you can store the results you get.
+  -Give priority to multiplication, division DONE and operations between brackets.
+  -Add some memory slots so you can store the results you get. DONE
   -Add advanced operations like roots or exponents.
   -In future maybe add some formulas like gravitational ones to see if you are using the correct formula, and maybe another window where
   you can write the parameters and it resolve it automatically.
