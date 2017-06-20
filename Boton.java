@@ -13,12 +13,19 @@ public class Boton extends JButton{
 	private Color active=new Color(204,229,255);
 	private Color hovActive=new Color(153,204,255);
 	private boolean activeB;
+	private boolean bold;
+	private Font nom;
 	public Boton(String t){
 		this.setText(t);
 		det();
 	}
 	public Boton(){
 		det();
+	}
+	public Boton(String t,int tam){
+		this.setText(t);
+		det();
+		this.setTextSize(tam);
 	}
 	private void det(){
 		this.setBackground(bg);
