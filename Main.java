@@ -53,9 +53,10 @@ class Contenido extends JPanel{
 	//.......
 	//CONSTANTES
 	JPanel constantes;
-	
-	
-	
+	Boton bG, bMT,bRT,bUA,bh,bimpMag;
+	Boton bg0,bLuz,be,bme,bmp,bmn;
+	private float G,MT,RT,UA,h,impMag;
+	private float g0,c,e,me,mp,mn; 
 	//.......
 	JTextField inputField;
 	String input;
@@ -71,6 +72,7 @@ class Contenido extends JPanel{
 		setExtraButtons();
 		setPad();
 		setMem();
+		setConst();
 		revalidate();
 	}
 	private void setLayouts(){
@@ -325,9 +327,8 @@ class Contenido extends JPanel{
 		add(mem);
 		setbSto();
 		int tam=25;
-		bA=new Boton("A"); bB=new Boton("B"); bC=new Boton("C"); bD=new Boton("D"); bE=new Boton("E");
+		bA=new Boton("A",tam); bB=new Boton("B",tam); bC=new Boton("C",tam); bD=new Boton("D",tam); bE=new Boton("E",tam);
 		mem.add(bA); mem.add(bB); mem.add(bC); mem.add(bD); mem.add(bE);
-		bA.setTextSize(tam); bB.setTextSize(tam); bC.setTextSize(tam); bD.setTextSize(tam); bE.setTextSize(tam);
 		class actMemorias implements ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -387,6 +388,54 @@ class Contenido extends JPanel{
 		bSto.addActionListener(new actBSto());
 	}
 	
+	private void setConst(){
+		G=exp(6.67384,-11);
+		MT=exp(5.97,24);
+		RT=exp(6370,3);
+		UA=150000000;
+		g0=(float) 9.81;
+		c=exp(3,8);
+		h=exp(6.62606957,-34); 
+		impMag=exp(12.56370614359,-7); 
+		e=exp(1.602176565,-19);
+		me=exp(9.10938216,-31);
+		mp=exp(1.672621637,-27);
+		mn=exp(1.674927211,-27);
+		
+		constantes=new JPanel();
+		constantes.setLayout(new GridLayout(2,6));
+		constantes.setBounds(15, 480, 350, 50);
+		add(constantes);
+		
+		int tam=15;
+		
+		bG=new Boton("G",tam); bMT=new Boton("MT",tam); bRT=new Boton("RT",tam);
+		bUA=new Boton("UA",tam); bg0=new Boton("g0",tam); bLuz=new Boton("c",tam);
+		bh=new Boton("h",tam); bimpMag=new Boton("Mu",tam); be=new Boton("e",tam);
+		bme=new Boton("me",tam); bmp=new Boton("mp",tam); bmn=new Boton("mn",tam);
+		
+		constantes.add(bG); constantes.add(bMT); constantes.add(bRT);
+		constantes.add(bUA); constantes.add(bg0); constantes.add(bLuz);
+		constantes.add(bh); constantes.add(bimpMag); constantes.add(be);
+		constantes.add(bme); constantes.add(bmp); constantes.add(bmn);
+		
+		
+		class constAct implements ActionListener{
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Boton a=(Boton)e.getSource();
+				input+=(String)a.getText();
+				inputField.setText(input);
+			}
+		}
+		ActionListener act=new constAct();
+		bG.addActionListener(act); bMT.addActionListener(act); bRT.addActionListener(act);
+		bUA.addActionListener(act); bg0.addActionListener(act); bLuz.addActionListener(act);
+		bh.addActionListener(act); bimpMag.addActionListener(act); be.addActionListener(act);
+		bme.addActionListener(act); bmp.addActionListener(act); bmn.addActionListener(act);
+		
+	}
+	
 	private void salir(){
 		salir=new Boton("Exit");
 		salir.setBounds(335, 5,60,30);
@@ -422,5 +471,12 @@ class Contenido extends JPanel{
 	public String toStringF(float num){
 		String res=Float.toString(num);
 		return res;
+	}
+	public float exp(double norm,float e){
+		float res=(float)(norm*Math.pow(10,e));
+		return res;
+	}
+	private String ascii(int codigo){
+		return Character.toString ((char) codigo);
 	}
 }
