@@ -18,7 +18,7 @@ public class Main {
 		Ventana v=new Ventana();
 		v.setVisible(true);
 	}
-
+	int a=0;
 }
 class Ventana extends JFrame{
 
@@ -62,8 +62,11 @@ class Contenido extends JPanel{
 	String input;
 	float[] nums;
 	char[] op;
-	int Ipos,id,numOp;
+	int id,numOp;
 	int[] pos;
+	int numParantesis;
+	int[] posP;
+	boolean[] paran;
 	Color bg;
 	public Contenido(){
 		setLayout(null);
@@ -162,121 +165,64 @@ class Contenido extends JPanel{
 	}
 	
 	private void getPosyOp(){
-		nums=new float[100];
-		op=new char[100];
-		pos=new int[100];
+		int n=100;
+		nums=new float[n];
+		op=new char[n];
+		pos=new int[n];
+		numParantesis=0;
+		posP=new int[n];
+		paran=new boolean[n];
 		for(int a=0;a<pos.length;a++){pos[a]=0;}
 		id=0;
-		Ipos=0;
 		char c;
-		boolean b=false;
+		String a="";
 		numOp=0;
 		for(int i=0;i<input.length();i++){
 			c=input.charAt(i);
 			if(c=='+'||c=='-'||c=='*'||c=='/'){ 
 				op[id]=c;
 				pos[id]=i;
-				b=true;
 				numOp++;
 				id++;
+			}
+			if(c=='('){
+				posP[id]=i;
+				paran[id]=true;
+			}else if(c==')'){
+				posP[id]=i;
+				paran[id]=false;
 			}
 		}
 		id=0;
 		if(numOp!=0){
 			while(id<=numOp){
-				if(id==0){
-					String a=input.substring(0, pos[id]);
-					if(a.equals("A") || a.equals("B") || a.equals("C")|| a.equals("D")|| a.equals("E")){
-						switch(a){
-							case "A":
-								nums[id]=A;
-								break;
-							case "B":
-								nums[id]=B;
-								break;
-							case "C":
-								nums[id]=C;
-								break;
-							case "D":
-								nums[id]=D;
-								break;
-							case "E":
-								nums[id]=E;
-								break;
-						}
-					}else{
-						nums[id]=toFloat(a);
+				
+				if(id==0){ //FIRST VALUE
+					if(posP[id]==0){
+						id++;
 					}
-				}else if(id==numOp){
-					String a=input.substring(pos[id-1]+1,input.length());
-					if(a.equals("A") || a.equals("B") || a.equals("C")|| a.equals("D")|| a.equals("E")){
-						switch(a){
-							case "A":
-								nums[id]=A;
-								break;
-							case "B":
-								nums[id]=B;
-								break;
-							case "C":
-								nums[id]=C;
-								break;
-							case "D":
-								nums[id]=D;
-								break;
-							case "E":
-								nums[id]=E;
-								break;
-						}
-					}else{
-						nums[id]=toFloat(a);
-						
-					}
+					a=input.substring(id, pos[0]);
+					System.out.println(a);
+				}else if(id==numOp){ //LAST VALUE
+					a=input.substring(pos[id-1]+1,input.length());
+				}else if(posP[id-1]==(id-1)){ 
+					a=input.substring(posP[id-1]+1,pos[id]);
+				}else if(posP[id+1]==(id+1)){
+					a=input.substring(pos[id-1]+1,posP[id]);
 				}else{
-					String a=input.substring(pos[id-1]+1,pos[id]);
-					if(a.equals("A") || a.equals("B") || a.equals("C")|| a.equals("D")|| a.equals("E")){
-						switch(a){
-							case "A":
-								nums[id]=A;
-								break;
-							case "B":
-								nums[id]=B;
-								break;
-							case "C":
-								nums[id]=C;
-								break;
-							case "D":
-								nums[id]=D;
-								break;
-							case "E":
-								nums[id]=E;
-								break;
-						}
-					}else{
-						nums[id]=toFloat(a);
-					}
+					a=input.substring(pos[id-1]+1,pos[id]);	
+				}
+				if(checkLetters(a)){
+					assignLetter(a,id);
+				}else{
+					nums[id]=toFloat(a);
 				}
 				id++;
 			}
 		}else{
-			String a=input.substring(0, input.length());
-			if(a.equals("A") || a.equals("B") || a.equals("C")|| a.equals("D")|| a.equals("E")){
-				switch(a){
-					case "A":
-						nums[id]=A;
-						break;
-					case "B":
-						nums[id]=B;
-						break;
-					case "C":
-						nums[id]=C;
-						break;
-					case "D":
-						nums[id]=D;
-						break;
-					case "E":
-						nums[id]=E;
-						break;
-				}
+			a=input.substring(0, input.length());
+			if(checkLetters(a)){
+				assignLetter(a,id);
 			}else{
 				nums[id]=toFloat(a);
 			}
@@ -285,7 +231,6 @@ class Contenido extends JPanel{
 	private void getResult(){
 		getPosyOp();
 		float res=0;
-		float sum=0;
 		id=0;
 		while(id<=numOp){// MAKE PRIORITY ON BRACKETS
 			if(id==0){
@@ -479,4 +424,70 @@ class Contenido extends JPanel{
 	private String ascii(int codigo){
 		return Character.toString ((char) codigo);
 	}
+	
+	//Checkers
+	private boolean checkLetters(String a){
+		return (a.equals("A") || a.equals("B") || a.equals("C")|| a.equals("D")|| a.equals("E")
+				||a.equals("G") ||a.equals("MT") ||a.equals("RT") ||a.equals("UA") ||a.equals("h") ||a.equals("Mu") ||a.equals("g0")
+				||a.equals("c") ||a.equals("e") ||a.equals("me") ||a.equals("mp") ||a.equals("mn"));
+	}
+	private void assignLetter(String a,int id){
+		switch(a){
+			case "A":
+				nums[id]=A;
+				break;
+			case "B":
+				nums[id]=B;
+				break;
+			case "C":
+				nums[id]=C;
+				break;
+			case "D":
+				nums[id]=D;
+				break;
+			case "E":
+				nums[id]=E;
+				break;
+				
+			case "G":
+				nums[id]=G;
+				break;
+			case "MT":
+				nums[id]=MT;
+				break;
+			case "RT":
+				nums[id]=RT;
+				break;
+			case "UA":
+				nums[id]=UA;
+				break;
+			case "g0":
+				nums[id]=g0;
+				break;
+				
+			case "h":
+				nums[id]=h;
+				break;
+			case "Mu":
+				nums[id]=impMag;
+				break;
+			case "c":
+				nums[id]=c;
+				break;
+			case "e":
+				nums[id]=e;
+				break;
+			case "me":
+				nums[id]=me;
+				break;
+			case "mp":
+				nums[id]=mp;
+				break;
+			case "mn":
+				nums[id]=mn;
+				break;
+		}
+	}
+	
+	
 }
