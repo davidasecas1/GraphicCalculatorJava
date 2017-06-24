@@ -4,14 +4,9 @@
 package main;
 
 import java.awt.*;
-import java.awt.color.ColorSpace;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -38,12 +33,12 @@ class Ventana extends JFrame{
 
 class Contenido extends JPanel{
 	JLabel background;
-	Boton salir,Bresultado,del;
+	Boton salir,Bresultado,del,delUnit;
 	JPanel up;
 	//PAD
 	JPanel pad;
-	Boton b1,b2,b3,badd,bdot;
-	Boton b4,b5,b6,bdec;
+	Boton b1,b2,b3,badd,bpow;
+	Boton b4,b5,b6,bdec,bdot;
 	Boton b7,b8,b9,bmult;
 	Boton bpa,b0,bpc,bdiv;
 	//......
@@ -51,15 +46,15 @@ class Contenido extends JPanel{
 	JPanel mem;
 	Boton bA,bB,bC,bD,bE;
 	Boton bSto;
-	float A,B,C,D,E;
+	static float A,B,C,D,E;
 	boolean Sto;
 	//.......
 	//CONSTANTES
 	JPanel constantes;
 	Boton bG, bMT,bRT,bUA,bh,bimpMag;
-	Boton bg0,bLuz,be,bme,bmp,bmn;
-	private float G,MT,RT,UA,h,impMag;
-	private float g0,c,e,me,mp,mn; 
+	Boton bg0,bLuz,be,bme,bmp,bpi;
+	private static float G,MT,RT,UA,h,impMag;
+	private static float g0,c,e,me,mp,pi; 
 	//.......
 	JTextField inputField;
 	String input;
@@ -68,9 +63,10 @@ class Contenido extends JPanel{
 	int id,numOp;
 	int[] pos;
 	int numParantesis;
-	int[] posP;
+	int[] posP,posNumeros;
 	boolean[] paran;
 	Color bg;
+	Calculo calc;
 	public Contenido(){
 		setLayout(null);
 		setLayouts();
@@ -80,6 +76,12 @@ class Contenido extends JPanel{
 		setMem();
 		setConst();
 		revalidate();
+	}
+	private void getResult(){
+		calc=new Calculo(input);
+		float res=calc.toResult(calc.toPostFix());
+		input=toStringF(res);
+		inputField.setText(input);
 	}
 	private void setLayouts(){
 		//bg=new Color(102,178,255);
@@ -91,7 +93,7 @@ class Contenido extends JPanel{
 	private void setInputs(){
 		input="";
 		inputField=new JTextField();
-		inputField.setBounds(15, 15, 250, 40);
+		inputField.setBounds(15, 15, 220, 40);
 		add(inputField);
 		class listenInputField implements DocumentListener{
 			@Override
@@ -110,22 +112,34 @@ class Contenido extends JPanel{
 	private void setExtraButtons(){
 		//DELETE BUTTON
 		del=new Boton("C");
-		del.setBounds(275, 15, 50, 40);
+		del.setBounds(285, 15, 50, 40);
 		add(del);
 		del.setTextSize(20);
 		class Delete implements ActionListener{ //Class which acts when the button is clicked
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(input!="" && input!=null){ // ERROR
-					//input=input.substring(0, input.length()-1);
-					inputField.setText("");
-				}
+				input="";
+				inputField.setText(input);
 			}
 		}
 		del.addActionListener(new Delete());
+		delUnit=new Boton(uniCode('\u00AB'));
+		delUnit.setBounds(235, 15, 50, 40);
+		add(delUnit);
+		delUnit.setTextSize(25);
+		class DeleteUnit implements ActionListener{ //Class which acts when the button is clicked
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(input!="" && input!=null){ // ERROR
+					input=input.substring(0, input.length()-1);
+					inputField.setText(input);
+				}
+			}
+		}
+		delUnit.addActionListener(new DeleteUnit());
 		//RESOLVE BUTTON =
 		Bresultado=new Boton("=");
-		Bresultado.setBounds(295, 207, 70, 262);
+		Bresultado.setBounds(295, 295, 70, 174);
 		add(Bresultado);
 		class resolver implements ActionListener{ //Class which acts when the button is clicked
 			@Override
@@ -141,13 +155,13 @@ class Contenido extends JPanel{
 		pad.setBackground(bg);
 		pad.setBounds(15, 120,350,350);
 		add(pad);
-		b1=new Boton("1"); b2=new Boton("2"); b3=new Boton("3"); badd=new Boton("+"); bdot=new Boton(".");
-		b4=new Boton("4"); b5=new Boton("5"); b6=new Boton("6"); bdec=new Boton("-");
+		b1=new Boton("1"); b2=new Boton("2"); b3=new Boton("3"); badd=new Boton("+"); bpow=new Boton("^");
+		b4=new Boton("4"); b5=new Boton("5"); b6=new Boton("6"); bdec=new Boton("-"); bdot=new Boton(".");
 		b7=new Boton("7"); b8=new Boton("8"); b9=new Boton("9"); bmult=new Boton("*");
 		bpa=new Boton("("); b0=new Boton("0"); bpc=new Boton(")"); bdiv=new Boton("/");
 		int sh=15;
-		pad.add(b1); pad.add(b2); pad.add(b3); pad.add(badd); pad.add(bdot);
-		pad.add(b4); pad.add(b5);  pad.add(b6); pad.add(bdec); pad.add(Box.createHorizontalStrut(sh));
+		pad.add(b1); pad.add(b2); pad.add(b3); pad.add(badd); pad.add(bpow);
+		pad.add(b4); pad.add(b5);  pad.add(b6); pad.add(bdec); pad.add(bdot);
 		pad.add(b7); pad.add(b8);  pad.add(b9); pad.add(bmult); pad.add(Box.createHorizontalStrut(sh));
 		pad.add(bpa); pad.add(b0); pad.add(bpc); pad.add(bdiv); pad.add(Box.createHorizontalStrut(sh));
 		
@@ -159,115 +173,12 @@ class Contenido extends JPanel{
 				inputField.setText(input);
 			}
 		}
-		
-		
-		b1.addActionListener(new BotonPad()); b2.addActionListener(new BotonPad()); b3.addActionListener(new BotonPad()); badd.addActionListener(new BotonPad()); bdot.addActionListener(new BotonPad());
-		b4.addActionListener(new BotonPad()); b5.addActionListener(new BotonPad()); b6.addActionListener(new BotonPad()); bdec.addActionListener(new BotonPad());
-		b7.addActionListener(new BotonPad()); b8.addActionListener(new BotonPad()); b9.addActionListener(new BotonPad()); bmult.addActionListener(new BotonPad());
-		bpa.addActionListener(new BotonPad()); b0.addActionListener(new BotonPad()); bpc.addActionListener(new BotonPad()); bdiv.addActionListener(new BotonPad());
-	}
-	
-	private void getPosyOp(){
-		int n=100;
-		nums=new float[n];
-		op=new char[n];
-		pos=new int[n];
-		numParantesis=0;
-		posP=new int[n];
-		paran=new boolean[n];
-		for(int a=0;a<pos.length;a++){pos[a]=0;}
-		id=0;
-		char c;
-		String a="";
-		numOp=0;
-		for(int i=0;i<input.length();i++){
-			c=input.charAt(i);
-			if(c=='+'||c=='-'||c=='*'||c=='/'){ 
-				op[id]=c;
-				pos[id]=i;
-				numOp++;
-				id++;
-			}
-			if(c=='('){
-				posP[id]=i;
-				paran[id]=true;
-			}else if(c==')'){
-				posP[id]=i;
-				paran[id]=false;
-			}
-		}
-		id=0;
-		if(numOp!=0){
-			while(id<=numOp){
-				
-				if(id==0){ //FIRST VALUE
-					if(posP[id]==0){
-						id++;
-					}
-					a=input.substring(id, pos[0]);
-					System.out.println(a);
-				}else if(id==numOp){ //LAST VALUE
-					a=input.substring(pos[id-1]+1,input.length());
-				}else if(posP[id-1]==(id-1)){ 
-					a=input.substring(posP[id-1]+1,pos[id]);
-				}else if(posP[id+1]==(id+1)){
-					a=input.substring(pos[id-1]+1,posP[id]);
-				}else{
-					a=input.substring(pos[id-1]+1,pos[id]);	
-				}
-				if(checkLetters(a)){
-					assignLetter(a,id);
-				}else{
-					nums[id]=toFloat(a);
-				}
-				id++;
-			}
-		}else{
-			a=input.substring(0, input.length());
-			if(checkLetters(a)){
-				assignLetter(a,id);
-			}else{
-				nums[id]=toFloat(a);
-			}
-		}
-	}
-	private void getResult(){
-		getPosyOp();
-		float res=0;
-		id=0;
-		while(id<=numOp){// MAKE PRIORITY ON BRACKETS
-			if(id==0){
-				if(res==0)res=nums[id];
-			}else{
-				if(op[id-1]=='*' || op[id-1]=='/'){
-					if(op[id-1]=='*'){
-						res*=nums[id];
-					}else if(op[id-1]=='/'){
-						res/=nums[id];
-					}
-				}
-			}
-			id++;
-		} // I divided this into two whiles because of the priority of * and /
-		id=0;
-		while(id<=numOp){
-			if(id==0){
-				if(res==0)res=nums[id];
-			}else{
-				if(op[id-1]=='+' || op[id-1]=='-'){
-					if(op[id-1]=='+'){
-						res+=nums[id];
-					}else if(op[id-1]=='-'){
-						res-=nums[id];
-					}
-				}
-			}
-			id++;
-		}
-		input=toStringF(res);
-		inputField.setText(input);
-	}
-	
+		BotonPad boton=new BotonPad();
+		b1.addActionListener(boton); b2.addActionListener(boton); b3.addActionListener(boton); badd.addActionListener(boton); bpow.addActionListener(boton);
+		b4.addActionListener(boton); b5.addActionListener(boton); b6.addActionListener(boton); bdec.addActionListener(boton); bdot.addActionListener(boton);
+		b7.addActionListener(boton); b8.addActionListener(boton); b9.addActionListener(boton); bmult.addActionListener(boton);
+		bpa.addActionListener(boton); b0.addActionListener(boton); bpc.addActionListener(boton); bdiv.addActionListener(boton); 
+	}	
 	private void setMem(){
 		mem=new JPanel();
 		mem.setLayout(new GridLayout(1,5));
@@ -314,7 +225,6 @@ class Contenido extends JPanel{
 		bD.addActionListener(new actMemorias()); bE.addActionListener(new actMemorias());
 		
 	}
-	
 	private void setbSto(){
 		A=0;B=0;C=0;D=0;E=0;
 		Sto=false;
@@ -348,7 +258,7 @@ class Contenido extends JPanel{
 		e=exp(1.602176565,-19);
 		me=exp(9.10938216,-31);
 		mp=exp(1.672621637,-27);
-		mn=exp(1.674927211,-27);
+		pi=(float)Math.PI;
 		
 		constantes=new JPanel();
 		constantes.setLayout(new GridLayout(2,6));
@@ -357,15 +267,15 @@ class Contenido extends JPanel{
 		
 		int tam=15;
 		
-		bG=new Boton("G",tam); bMT=new Boton("MT",tam); bRT=new Boton("RT",tam);
-		bUA=new Boton("UA",tam); bg0=new Boton("g0",tam); bLuz=new Boton("c",tam);
-		bh=new Boton("h",tam); bimpMag=new Boton("Mu",tam); be=new Boton("e",tam);
-		bme=new Boton("me",tam); bmp=new Boton("mp",tam); bmn=new Boton("mn",tam);
+		bG=new Boton("G",tam); bMT=new Boton("M",tam); bRT=new Boton("R",tam);
+		bUA=new Boton("U",tam); bg0=new Boton("g",tam); bLuz=new Boton("c",tam);
+		bh=new Boton("h",tam); bimpMag=new Boton(uniCode('\u03BC'),tam); be=new Boton("e",tam);
+		bme=new Boton("q",tam); bmp=new Boton("p",tam); bpi=new Boton(uniCode('\u03C0'),tam);
 		
 		constantes.add(bG); constantes.add(bMT); constantes.add(bRT);
 		constantes.add(bUA); constantes.add(bg0); constantes.add(bLuz);
 		constantes.add(bh); constantes.add(bimpMag); constantes.add(be);
-		constantes.add(bme); constantes.add(bmp); constantes.add(bmn);
+		constantes.add(bme); constantes.add(bmp); constantes.add(bpi);
 		
 		
 		class constAct implements ActionListener{
@@ -380,7 +290,7 @@ class Contenido extends JPanel{
 		bG.addActionListener(act); bMT.addActionListener(act); bRT.addActionListener(act);
 		bUA.addActionListener(act); bg0.addActionListener(act); bLuz.addActionListener(act);
 		bh.addActionListener(act); bimpMag.addActionListener(act); be.addActionListener(act);
-		bme.addActionListener(act); bmp.addActionListener(act); bmn.addActionListener(act);
+		bme.addActionListener(act); bmp.addActionListener(act); bpi.addActionListener(act);
 		
 	}
 	
@@ -424,73 +334,72 @@ class Contenido extends JPanel{
 		float res=(float)(norm*Math.pow(10,e));
 		return res;
 	}
-	private String ascii(int codigo){
-		return Character.toString ((char) codigo);
+	private String uniCode(char codigo){
+		return Character.toString (codigo);
+	}
+	private static String uniCodeS(char codigo){
+		return Character.toString (codigo);
 	}
 	
 	//Checkers
-	private boolean checkLetters(String a){
-		return (a.equals("A") || a.equals("B") || a.equals("C")|| a.equals("D")|| a.equals("E")
-				||a.equals("G") ||a.equals("MT") ||a.equals("RT") ||a.equals("UA") ||a.equals("h") ||a.equals("Mu") ||a.equals("g0")
-				||a.equals("c") ||a.equals("e") ||a.equals("me") ||a.equals("mp") ||a.equals("mn"));
-	}
-	private void assignLetter(String a,int id){
+	public static float getLettersValue(String a){
+		float res=0;
+		
 		switch(a){
 			case "A":
-				nums[id]=A;
+				res=A;
 				break;
 			case "B":
-				nums[id]=B;
+				res=B;
 				break;
 			case "C":
-				nums[id]=C;
+				res=C;
 				break;
 			case "D":
-				nums[id]=D;
+				res=D;
 				break;
 			case "E":
-				nums[id]=E;
+				res=E;
 				break;
 				
 			case "G":
-				nums[id]=G;
+				res=G;
 				break;
-			case "MT":
-				nums[id]=MT;
+			case "M":
+				res=MT;
 				break;
-			case "RT":
-				nums[id]=RT;
+			case "R":
+				res=RT;
 				break;
-			case "UA":
-				nums[id]=UA;
+			case "U":
+				res=UA;
 				break;
-			case "g0":
-				nums[id]=g0;
+			case "g":
+				res=g0;
 				break;
 				
 			case "h":
-				nums[id]=h;
-				break;
-			case "Mu":
-				nums[id]=impMag;
+				res=h;
 				break;
 			case "c":
-				nums[id]=c;
+				res=c;
 				break;
 			case "e":
-				nums[id]=e;
+				res=e;
 				break;
-			case "me":
-				nums[id]=me;
+			case "q":
+				res=me;
 				break;
-			case "mp":
-				nums[id]=mp;
-				break;
-			case "mn":
-				nums[id]=mn;
+			case "p":
+				res=mp;
 				break;
 		}
+		if(a.equals(uniCodeS('\u03BC'))){
+			res=impMag;
+		}
+		if(a.equals(uniCodeS('\u03C0'))){
+			res=pi;
+		}
+		return res;
 	}
-	
-	
 }
