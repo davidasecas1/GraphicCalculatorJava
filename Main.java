@@ -1,3 +1,6 @@
+/**
+ * @author David Espejo Antiñolo
+ */
 package main;
 
 import java.awt.*;
