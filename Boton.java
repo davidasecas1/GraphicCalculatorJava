@@ -7,19 +7,19 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
 public class Boton extends JButton{
+	private static final long serialVersionUID = 1L;
 	private Color bg=new Color(240,240,240);
 	private Color hov=new Color(224,224,224);
 	private Color active=new Color(204,229,255);
 	private Color hovActive=new Color(153,204,255);
 	private boolean activeB;
-	private boolean bold;
-	private Font nom;
+	private String t;
 	public Boton(String t){
-		this.setText(t);
+		this.t=t;
+		this.setText(this.t);
 		det();
 	}
 	public Boton(){
@@ -60,7 +60,6 @@ public class Boton extends JButton{
 			public void mouseReleased(MouseEvent arg0) {}
 			@Override
 			public void mouseClicked(MouseEvent arg0) {}
-			
 		}
 		this.addMouseListener(new hover());
 	}
