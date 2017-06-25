@@ -19,7 +19,7 @@ public class Main {
 	int a=0;
 }
 class Ventana extends JFrame{
-
+	private static final long serialVersionUID = 1L;
 	public Ventana(){
 		setSize(400,550);
 		setLocationRelativeTo(null);
@@ -32,6 +32,7 @@ class Ventana extends JFrame{
 }
 
 class Contenido extends JPanel{
+	private static final long serialVersionUID = 1L;
 	JLabel background;
 	Boton salir,Bresultado,del,delUnit;
 	JPanel up;
