@@ -26,14 +26,16 @@ public class Boton extends JButton{
 		det();
 	}
 	public Boton(String t,int tam){
-		this.setText(t);
+		this.t=t;
+		this.setText(this.t);
 		det();
 		this.setTextSize(tam);
 	}
 	private void det(){
 		this.setBackground(bg);
 		this.setBorderPainted(false);
-		this.setFont(new Font("Arial",Font.BOLD,50));
+		this.setOpaque(true);
+		this.setFont(new Font("New Times Roman",Font.BOLD,50));
 		activeB=false;
 		class hover implements MouseListener{
 			@Override
