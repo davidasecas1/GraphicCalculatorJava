@@ -11,63 +11,54 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 public class Main {
-
 	public static void main(String[] args) {
 		Ventana v=new Ventana();
 		v.setVisible(true);
+		
 	}
-	int a=0;
 }
 class Ventana extends JFrame{
 	private static final long serialVersionUID = 1L;
+	private final ImageIcon img = new ImageIcon("icono.png");
 	public Ventana(){
-		setSize(400,550);
+		setSize(380,570);
 		setLocationRelativeTo(null);
-		setTitle("Calculator");
-		setUndecorated(true);
+		setTitle("Calculator");		
+		setIconImage(img.getImage());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Contenido c=new Contenido();
 		add(c);
 	}
 }
-
 class Contenido extends JPanel{
 	private static final long serialVersionUID = 1L;
-	JLabel background;
-	Boton salir,Bresultado,del,delUnit;
-	JPanel up;
+	private Boton Bresultado,del,delUnit;
 	//PAD
 	JPanel pad;
-	Boton b1,b2,b3,badd,bpow;
-	Boton b4,b5,b6,bdec,bdot;
-	Boton b7,b8,b9,bmult;
-	Boton bpa,b0,bpc,bdiv;
+	private Boton b1,b2,b3,badd,bpow;
+	private Boton b4,b5,b6,bdec,bdot;
+	private Boton b7,b8,b9,bmult;
+	private Boton bpa,b0,bpc,bdiv;
 	//......
 	//MEMORIAS
-	JPanel mem;
-	Boton bA,bB,bC,bD,bE;
-	Boton bSto;
-	static float A,B,C,D,E;
-	boolean Sto;
+	private JPanel mem;
+	private Boton bA,bB,bC,bD,bE;
+	private Boton bSto;
+	private static float A,B,C,D,E;
+	private boolean Sto;
 	//.......
 	//CONSTANTES
-	JPanel constantes;
-	Boton bG, bMT,bRT,bUA,bh,bimpMag;
-	Boton bg0,bLuz,be,bme,bmp,bpi;
+	private JPanel constantes;
+	private Boton bG, bMT,bRT,bUA,bh,bimpMag;
+	private Boton bg0,bLuz,be,bme,bmp,bpi;
 	private static float G,MT,RT,UA,h,impMag;
 	private static float g0,c,e,me,mp,pi; 
 	//.......
-	JTextField inputField;
-	String input;
-	float[] nums;
-	char[] op;
-	int id,numOp;
-	int[] pos;
-	int numParantesis;
-	int[] posP,posNumeros;
-	boolean[] paran;
-	Color bg;
-	Calculo calc;
+	private JTextField inputField;
+	private String input;
+	private Color bg;
+	private Calculo calc;
+	private final int tam=34;
 	public Contenido(){
 		setLayout(null);
 		setLayouts();
@@ -77,6 +68,7 @@ class Contenido extends JPanel{
 		setMem();
 		setConst();
 		revalidate();
+		repaint();
 	}
 	private void getResult(){
 		calc=new Calculo(input);
@@ -85,11 +77,9 @@ class Contenido extends JPanel{
 		inputField.setText(input);
 	}
 	private void setLayouts(){
-		//bg=new Color(102,178,255);
 		bg=new Color(240,240,240);
 		setBackground(bg);
 		setBorder(BorderFactory.createLineBorder(new Color(220,220,220)));
-		salir();
 	}
 	private void setInputs(){
 		input="";
@@ -112,10 +102,9 @@ class Contenido extends JPanel{
 	}
 	private void setExtraButtons(){
 		//DELETE BUTTON
-		del=new Boton("C");
+		del=new Boton("C",9);
 		del.setBounds(285, 15, 50, 40);
 		add(del);
-		del.setTextSize(20);
 		class Delete implements ActionListener{ //Class which acts when the button is clicked
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -124,10 +113,9 @@ class Contenido extends JPanel{
 			}
 		}
 		del.addActionListener(new Delete());
-		delUnit=new Boton(uniCode('\u00AB'));
+		delUnit=new Boton(uniCode('\u00AB'),12);
 		delUnit.setBounds(235, 15, 50, 40);
 		add(delUnit);
-		delUnit.setTextSize(25);
 		class DeleteUnit implements ActionListener{ //Class which acts when the button is clicked
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -139,7 +127,7 @@ class Contenido extends JPanel{
 		}
 		delUnit.addActionListener(new DeleteUnit());
 		//RESOLVE BUTTON =
-		Bresultado=new Boton("=");
+		Bresultado=new Boton("=",tam);
 		Bresultado.setBounds(295, 295, 70, 174);
 		add(Bresultado);
 		class resolver implements ActionListener{ //Class which acts when the button is clicked
@@ -156,10 +144,10 @@ class Contenido extends JPanel{
 		pad.setBackground(bg);
 		pad.setBounds(15, 120,350,350);
 		add(pad);
-		b1=new Boton("1"); b2=new Boton("2"); b3=new Boton("3"); badd=new Boton("+"); bpow=new Boton("^");
-		b4=new Boton("4"); b5=new Boton("5"); b6=new Boton("6"); bdec=new Boton("-"); bdot=new Boton(".");
-		b7=new Boton("7"); b8=new Boton("8"); b9=new Boton("9"); bmult=new Boton("*");
-		bpa=new Boton("("); b0=new Boton("0"); bpc=new Boton(")"); bdiv=new Boton("/");
+		b1=new Boton("1",tam); b2=new Boton("2",tam); b3=new Boton("3",tam); badd=new Boton("+",tam); bpow=new Boton("^",tam);
+		b4=new Boton("4",tam); b5=new Boton("5",tam); b6=new Boton("6",tam); bdec=new Boton("-",tam); bdot=new Boton(".",tam);
+		b7=new Boton("7",tam); b8=new Boton("8",tam); b9=new Boton("9",tam); bmult=new Boton("*",tam);
+		bpa=new Boton("(",tam); b0=new Boton("0",tam); bpc=new Boton(")",tam); bdiv=new Boton("/",tam);
 		int sh=15;
 		pad.add(b1); pad.add(b2); pad.add(b3); pad.add(badd); pad.add(bpow);
 		pad.add(b4); pad.add(b5);  pad.add(b6); pad.add(bdec); pad.add(bdot);
@@ -186,7 +174,7 @@ class Contenido extends JPanel{
 		mem.setBounds(15, 65, 350, 50);
 		add(mem);
 		setbSto();
-		int tam=25;
+		int tam=20;
 		bA=new Boton("A",tam); bB=new Boton("B",tam); bC=new Boton("C",tam); bD=new Boton("D",tam); bE=new Boton("E",tam);
 		mem.add(bA); mem.add(bB); mem.add(bC); mem.add(bD); mem.add(bE);
 		class actMemorias implements ActionListener{
@@ -229,8 +217,7 @@ class Contenido extends JPanel{
 	private void setbSto(){
 		A=0;B=0;C=0;D=0;E=0;
 		Sto=false;
-		bSto=new Boton("Sto");
-		bSto.setTextSize(15); 
+		bSto=new Boton("Sto",9);
 		mem.add(bSto);
 		class actBSto implements ActionListener{
 			@Override
@@ -294,21 +281,6 @@ class Contenido extends JPanel{
 		bme.addActionListener(act); bmp.addActionListener(act); bpi.addActionListener(act);
 		
 	}
-	
-	private void salir(){
-		salir=new Boton("Exit");
-		salir.setBounds(335, 5,60,30);
-		salir.setTextSize(14);
-		add(salir);
-		class exit implements ActionListener{
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				System.exit(0);
-			}
-		}
-		salir.addActionListener(new exit());
-	}
-	
 	public float toFloat(String str){
 		float res;
 		if(str!=null && str!=""){
