@@ -11,15 +11,21 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 public class Main {
+	/**
+	 * Main method, windows frame is created.
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		Ventana v=new Ventana();
 		v.setVisible(true);
-		
 	}
 }
 class Ventana extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private final ImageIcon img = new ImageIcon("icono.png");
+	/**
+	 * Constructor of main frame
+	 */
 	public Ventana(){
 		setSize(380,570);
 		setLocationRelativeTo(null);
@@ -59,6 +65,9 @@ class Contenido extends JPanel{
 	private Color bg;
 	private Calculo calc;
 	private final int tam=34;
+	/**
+	 * Main thread where layouts are created and added into main frame. Also main buttons and inputs are added.
+	 */
 	public Contenido(){
 		setLayout(null);
 		setLayouts();
